@@ -1,0 +1,5 @@
+# Apply on top of short/full: same batch shapes, only fewer steps and a small eval.
+max_steps: 10
+save_steps: 5
+eval_examples: 50
+eval_samples: 2

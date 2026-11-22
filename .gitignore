@@ -1,0 +1,15 @@
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+*.pyc
+.env
+.venv/
+.DS_Store
+results/runs/
+results/logs/
+results/checkpoints/*
+results/metrics/*
+results/plots/*
+!results/checkpoints/.gitkeep
+!results/metrics/.gitkeep
+!results/plots/.gitkeep

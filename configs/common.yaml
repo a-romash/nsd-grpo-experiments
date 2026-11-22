@@ -1,0 +1,48 @@
+# Shared hyperparameters for ALL experiments. Experiment files only set `experiment`.
+# Batch size, steps and eval size live in profiles/*.yaml.
+model: Qwen/Qwen3-1.7B
+thinking: false
+seed: 1
+
+# Data
+train_examples: null          # null = whole MATH train (~7.5K with boxed answers)
+max_prompt_tokens: 512
+max_completion_tokens: 1024
+
+# GRPO
+group_size: 8                 # generations per prompt
+top_p: 1.0                    # full distribution: on-policy sampling, no top-p mismatch
+grpo_beta: 0.01
+learning_rate: 2.0e-5         # LoRA needs ~10x the full-FT LR
+lr_scheduler_type: constant_with_warmup
+warmup_steps: 5
+
+# LoRA in bf16 (no 4-bit: vLLM weight sync merges the adapter)
+use_4bit: false
+lora_r: 32
+lora_alpha: 64
+
+# NSD
+nsd_lambda: 0.1
+nsd_alpha: 0.01
+nsd_forward_batch_size: 4     # micro-batch for the extra no-grad teacher forward
+
+# Memory / checkpoints
+micro_batch_size: 8           # lower to 4 on OOM (gradient accumulation adapts)
+save_steps: 25
+save_total_limit: 2
+
+# vLLM generation server (trl vllm-serve on the second GPU)
+use_vllm: true
+vllm_host: 127.0.0.1
+vllm_port: 8000
+vllm_gpu_memory_utilization: 0.85
+vllm_max_model_len: 2048
+
+# Evaluation (vLLM, MATH-500)
+eval_examples: 500
+eval_samples: 8               # Avg@8 / Pass@8
+eval_temperature: 0.6
+eval_top_p: 0.95
+eval_max_new_tokens: 2048
+eval_seed: 1234
