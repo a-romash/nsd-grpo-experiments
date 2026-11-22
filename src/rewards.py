@@ -35,24 +35,32 @@ def extract_answer(text: str) -> str | None:
     """Only use the final answer, never an arbitrary intermediate calculation."""
     if not isinstance(text, str) or not text.strip():
         return None
-    boxed = extract_last_boxed(text)
-    if boxed:
-        return boxed
-    # If generation was truncated without a final answer, this yields None.
-    found = re.findall(r"(?im)^\s*(?:final\s+)?answer\s*:\s*(.+?)\s*$", text)
-    return found[-1].strip().rstrip(".") if found else None
+    labels = list(re.finditer(r"(?im)^[ \t]*(?:final[ \t]+)?answer[ \t]*:", text))
+    if not labels:
+        return extract_last_boxed(text) or None
+    final = text[labels[-1].end():].strip()
+    if not final:
+        return None
+    first_line = final.splitlines()[0].strip()
+    if r"\boxed{" in first_line or first_line in {r"\[", "$$"}:
+        return extract_last_boxed(first_line) or extract_last_boxed(final) or None
+    return first_line.rstrip(".") or None
 
 
 def _numeric(text: str) -> Fraction | None:
     try:
-        return Fraction(text.replace(" ", "").replace(",", ""))
+        if "," in text:
+            if not re.fullmatch(r"[+-]?[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?", text):
+                return None
+            text = text.replace(",", "")
+        return Fraction(text)
     except (ValueError, ZeroDivisionError):
         return None
 
 
 def _simple_equal(a: str, b: str) -> bool:
-    aa = a.strip().replace(" ", "").replace("$", "")
-    bb = b.strip().replace(" ", "").replace("$", "")
+    aa = a.strip().strip("$").strip()
+    bb = b.strip().strip("$").strip()
     if aa == bb:
         return True
     fa, fb = _numeric(aa), _numeric(bb)
