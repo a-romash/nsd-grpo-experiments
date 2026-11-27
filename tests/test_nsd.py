@@ -7,6 +7,7 @@ def test_routing_zero():
     rewards = torch.tensor([0., 0., 0., 0., 0., 1., 0., 0., 1., 1., 1., 1.])
     selected = select_nsd_rows(rewards, 4, "zero")
     assert selected.tolist() == [True] * 4 + [False] * 8
+    assert select_nsd_rows(rewards, 4, "failed").tolist() == [True] * 5 + [False, True, True] + [False] * 4
     assert select_nsd_rows(rewards, 4, "all").sum() == 12
     assert select_nsd_rows(rewards, 4, "off").sum() == 0
 

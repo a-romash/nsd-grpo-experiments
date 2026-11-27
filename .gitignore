@@ -13,3 +13,4 @@ results/plots/*
 !results/checkpoints/.gitkeep
 !results/metrics/.gitkeep
 !results/plots/.gitkeep
+*.tar.gz

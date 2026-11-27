@@ -6,7 +6,7 @@
 #   PROFILE=full  SEEDS="1 2 3" EXPERIMENTS="grpo grpo_nsd_zero" scripts/run_all.sh
 source "$(dirname "$0")/lib.sh"
 SEEDS=${SEEDS:-1}
-EXPERIMENTS=${EXPERIMENTS:-"grpo grpo_nsd_all grpo_nsd_zero"}
+EXPERIMENTS=${EXPERIMENTS:-"grpo grpo_nsd_all grpo_nsd_failed grpo_nsd_zero"}
 
 if [[ ! -f "$(cfg baseline run_dir)/eval.json" ]]; then
   eval_run baseline 0

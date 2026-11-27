@@ -80,7 +80,7 @@ PROFILE=full SEEDS="1 2 3" scripts/run_all.sh
 ```
 
 Скрипт делает так:
-- baseline eval, затем для каждого seed: `grpo` → `grpo_nsd_all` → `grpo_nsd_zero`, каждый с train и eval;
+- baseline eval, затем для каждого seed: `grpo` → `grpo_nsd_all` → `grpo_nsd_failed` → `grpo_nsd_zero`, каждый с train и eval;
 - в конце пишет `results/runs/<profile>/summary.md`, `accuracy.png`, `training_curves.png`.
 
 Отдельный метод: `EXPERIMENTS="grpo_nsd_zero" SEEDS="2" scripts/run_all.sh`.

@@ -15,7 +15,7 @@ from pathlib import Path
 
 from .runlog import read_step_times
 
-EXPERIMENTS = ["baseline", "grpo", "grpo_nsd_all", "grpo_nsd_zero"]
+EXPERIMENTS = ["baseline", "grpo", "grpo_nsd_all", "grpo_nsd_failed", "grpo_nsd_zero"]
 CURVES = ["reward", "frac_reward_zero_std", "completions/mean_length",
           "completions/clipped_ratio", "nsd/active_rows", "nsd/loss"]
 
@@ -100,7 +100,7 @@ def summarize(profile: str, results_root: str = "results") -> Path:
                 merged[uid].append(score)
         if merged:
             per_exp_problem[exp] = {uid: statistics.mean(v) for uid, v in merged.items()}
-    pairs = [(a, b) for a in ("grpo_nsd_all", "grpo_nsd_zero") for b in ("grpo", "baseline")] + [("grpo", "baseline")]
+    pairs = [(a, b) for a in ("grpo_nsd_all", "grpo_nsd_failed", "grpo_nsd_zero") for b in ("grpo", "baseline")] + [("grpo", "baseline"), ("grpo_nsd_failed", "grpo_nsd_all"), ("grpo_nsd_failed", "grpo_nsd_zero")]
     lines += ["## Paired differences (same problems)", "",
               "| A − B | Δ Avg@k, p.p. | SE, p.p. | ~95% CI |", "|---|---|---|---|"]
     for a, b in pairs:
@@ -180,7 +180,7 @@ def smoke_report(run_dir: str | Path, price_per_hour: float | None = None) -> No
         per_step = median * n_prompts / prompts
         hours = per_step * n_steps / 3600
         print(f"  {name:5s}: ~{per_step:.0f} s/step x {n_steps} = {hours:.1f} h/run; "
-              f"3 methods ~{3 * hours:.1f} h (~{3 * hours * price:.0f} RUB at {price:.0f}/h, + eval)")
+              f"4 methods ~{4 * hours:.1f} h (~{4 * hours * price:.0f} RUB at {price:.0f}/h, + eval)")
 
     def series(key):
         return [row[key] for row in logs if key in row]

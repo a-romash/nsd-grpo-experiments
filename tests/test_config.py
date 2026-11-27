@@ -19,10 +19,10 @@ def test_smoke_keeps_batch_shape_of_base_profile():
 
 
 def test_experiments_share_hyperparameters():
-    configs = [load_config(f"configs/{e}.yaml", "full") for e in ("grpo", "grpo_nsd_all", "grpo_nsd_zero")]
+    configs = [load_config(f"configs/{e}.yaml", "full") for e in ("grpo", "grpo_nsd_all", "grpo_nsd_failed", "grpo_nsd_zero")]
     ignore = {"experiment", "nsd_mode", "_config_path", "run_name", "run_dir"}
     strip = [{k: v for k, v in c.items() if k not in ignore} for c in configs]
-    assert strip[0] == strip[1] == strip[2]
+    assert all(c == strip[0] for c in strip)
 
 
 def test_overrides_and_validation():

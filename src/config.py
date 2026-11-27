@@ -9,8 +9,8 @@ from pathlib import Path
 
 import yaml
 
-EXPERIMENTS = {"baseline", "grpo", "grpo_nsd_all", "grpo_nsd_zero"}
-NSD_MODE = {"baseline": "off", "grpo": "off", "grpo_nsd_all": "all", "grpo_nsd_zero": "zero"}
+EXPERIMENTS = {"baseline", "grpo", "grpo_nsd_all", "grpo_nsd_failed", "grpo_nsd_zero"}
+NSD_MODE = {"baseline": "off", "grpo": "off", "grpo_nsd_all": "all", "grpo_nsd_failed": "failed", "grpo_nsd_zero": "zero"}
 
 
 def _read(path: Path) -> dict:

@@ -15,8 +15,8 @@ from .nsd import nsd_loss, select_nsd_rows
 class SelectiveNSDGRPOTrainer(GRPOTrainer):
     def __init__(self, *args, nsd_mode="off", nsd_lambda=0.1, nsd_alpha=0.01,
                  nsd_forward_batch_size=4, nsd_negative_extra_tokens=256, **kwargs):
-        if nsd_mode not in {"off", "all", "zero"}:
-            raise ValueError("Supported modes: off/all/zero")
+        if nsd_mode not in {"off", "all", "failed", "zero"}:
+            raise ValueError("Supported modes: off/all/failed/zero")
         self.nsd_mode = nsd_mode
         self.nsd_lambda = float(nsd_lambda)
         self.nsd_alpha = float(nsd_alpha)
